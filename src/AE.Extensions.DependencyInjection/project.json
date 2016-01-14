@@ -1,0 +1,26 @@
+﻿{
+    "version": "0.0.1-*",
+    "description": "AE.Extensions.DependencyInjection Class Library",
+    "authors": [ "Wojtek Gadziński" ],
+    "tags": [ "DI", "IoC" ],
+
+    "projectUrl": "https://github.com/app-enhance/ae-core",
+    "licenseUrl": "https://github.com/app-enhance/ae-core/blob/master/LICENSE",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/app-enhance/ae-core"
+    },
+
+    "frameworks": {
+        "net461": { },
+        "dotnet5.4": { }
+    },
+
+    "dependencies": {
+        "System.Runtime": "4.0.21-*",
+        "System.Reflection.TypeExtensions": "4.1.0-*",
+        "System.Reflection.Extensions": "4.0.1-*",
+        "System.ComponentModel": "4.0.1-*",
+        "Microsoft.Extensions.DependencyInjection.Abstractions": "1.0.0-*"
+    }
+}

@@ -1,0 +1,30 @@
+﻿{
+    "version": "1.0.0-*",
+    "description": "AE.Extensions.DependencyInjection.Tests Class Library",
+    "authors": [ "Wojtek Gadziński" ],
+    "tags": [ "Tests" ],
+
+    "projectUrl": "https://github.com/app-enhance/ae-core",
+    "licenseUrl": "https://github.com/app-enhance/ae-core/blob/master/LICENSE",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/app-enhance/ae-core"
+    },
+
+    "frameworks": {
+        "dnx46": { },
+        "dnxcore50": { }
+    },
+
+    "dependencies": {
+        "AE.Extensions.DependencyInjection": "0.0.1-*",
+        "System.Runtime": "4.0.21-*",
+        "System.Reflection": "4.1.0-*",
+        "xunit": "2.1.0-*",
+        "xunit.runner.dnx": "2.1.0-*"
+    },
+
+    "commands": {
+        "test": "xunit.runner.dnx"
+    }
+}
