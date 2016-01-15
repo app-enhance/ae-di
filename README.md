@@ -3,16 +3,16 @@
 [![Build status](https://ci.appveyor.com/api/projects/status/s5ej8f3uechsx3gs/branch/master?svg=true)](https://ci.appveyor.com/project/Ermesx/ae-di/branch/master)
 [![app-enhance-dev MyGet Build Status](https://www.myget.org/BuildSource/Badge/app-enhance-dev?identifier=891bb83e-b009-4793-b622-495a6eab6afc)](https://www.myget.org/gallery/app-enhance-dev)
 
-This is extension library for `Microsoft.Extensions.DependencyInjection` to provide declarative way to pick out lifetime of services and register them in just a few lines.
+This is an extension library for `Microsoft.Extensions.DependencyInjection` which provides you with a declarative way to pick out lifetime of services and register them in just a few lines.
 
 ## Motivation
-When you want to register service (create dependency) in `IServiceCollection` you have to describe al lest 3 things.
+When you want to register a service (create dependency) in `IServiceCollection` you have to describe at least 3 things.
 
 * Service interface
 * Service implementation
 * Lifetime scope
 
-In default way it looks like below
+Ususally it should look like this (see below)
 ```c#
 // Method ex. in Startup.cs
 // doc: http://docs.asp.net/en/latest/fundamentals/dependency-injection.html
@@ -27,7 +27,7 @@ public void ConfigureServices(IServiceCollection services)
 }
 ```
 ```c#
-/// And service detinition in somewhere deeper
+/// And service definition somewhere, deeper in the code
 public interface IBankManager
 {
     int OpenAccount(string clientName);
@@ -44,17 +44,17 @@ public class BankManager : IBankManager
 }
 ```
 
-Every service must be manualy described in `ConfigureServices` method and it is easy to forgot about something.
-Many people who create other libraries like EF add static extending methods to simplify registrations. 
+Every service must be described in `ConfigureServices` method manualy which means that something can be easily missed.
+Many people who create libraries like MVC they add static extension methods to simplify registration. 
 It means all descriptions of their services are hidden. 
-They make our life easier but what about own custom servies ? What if you have dozens of them ?
+They make our life easier but what about our own custom services ? What if you have dozens of them ?
 
-I'm inspired how Orchard resolves that issue. 
-They create interfaces which correspond to lifetime scopes. Then every service interface inherit appropriate "scope interface" and describe dependencies to register in global container.
+I'm inspired by how Orchard team resolves that issue. 
+They created interfaces which correspond to lifetime scopes. So every service interface inherits appropriate "scope interface" and describes dependencies to register in global container.
 Im my case it looks like below - interfaces correspond exactly to `ServiceLifetime` enum.
 
 ```c#
-// This one descibe all dependencies
+// This one describes all dependencies
 public interface IDependency
 {
 }
@@ -71,15 +71,15 @@ public interface ITransientDependency : IDependency
 {
 }
 
-// Ommit registration for special cases
+// Omit registration for special cases
 public interface INotRegisterDependency
 {
 }
 ```
 
-## How it works?
+## How does it work?
 
-To use this approach you have to do two things:
+In order to use this approach you have to do two things:
 
 * Select dependency interface and inherit
 ```c#
@@ -94,7 +94,7 @@ public class BankManager : IBankManager
 {
     public int OpenAccount(string clientName)
     {
-        // Some account creating process...
+        // Account creating process...
 
         return Random.Next(1000000, 9999999);
     }
