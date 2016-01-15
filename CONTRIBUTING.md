@@ -2,8 +2,8 @@
 
 ## Build system
 
-Use a new system called KoreBuild, which is built using the sake build tools. The sake project is available here: 
-https://github.com/sakeproject/sake
+Use a new system called KoreBuild-dotnet. The project is available here: 
+https://github.com/aspnet/Universe
 
 ## Coding style guidelines
 
