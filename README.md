@@ -83,7 +83,8 @@ To use this approach you have to do two things:
 
 * Select dependency interface and inherit
 ```c#
-// It will be registered as a new ServiceDescriptor(typeof(IBankManager), typeof(BankManager), ServiceLifetime.Transient);
+// It will be registered as a 
+// new ServiceDescriptor(typeof(IBankManager), typeof(BankManager), ServiceLifetime.Transient);
 public interface IBankManager : ITransientDependency
 {
     int OpenAccount(string clientName);
