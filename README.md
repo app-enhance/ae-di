@@ -14,7 +14,8 @@ When you want to register service (create dependency) in `IServiceCollection` yo
 
 In default way it looks like below
 ```c#
-// Method ex. in Startup.cs - doc: http://docs.asp.net/en/latest/fundamentals/dependency-injection.html
+// Method ex. in Startup.cs
+// doc: http://docs.asp.net/en/latest/fundamentals/dependency-injection.html
 
 public void ConfigureServices(IServiceCollection services)
 {
@@ -24,9 +25,8 @@ public void ConfigureServices(IServiceCollection services)
     // Add MVC services to the services container.
     services.AddMvc();
 }
-
-// -------------
-
+```
+```c#
 /// And service detinition in somewhere deeper
 public interface IBankManager
 {
