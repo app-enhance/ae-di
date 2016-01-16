@@ -136,7 +136,7 @@ public class AuditBankManager : BankManager
 }
 ```
 
-*TODO:*  Add posibility to override services which already exists in `ServicesCollection'
+*TODO:*  Add possibility to override services which already exists in `ServicesCollection'
 
 ## Integrations
 
