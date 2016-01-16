@@ -37,7 +37,7 @@ public class BankManager : IBankManager
 {
     public int OpenAccount(string clientName)
     {
-        // Some account creating process...
+        // Account creating process...
         
         return Random.Next(1000000, 9999999);
     }
