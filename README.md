@@ -21,6 +21,8 @@ public void ConfigureServices(IServiceCollection services)
 {
     var serviceDescriptor = new ServiceDescriptor(typeof(IBankManager), typeof(BankManager), ServiceLifetime.Transient);
     services.Add(serviceDescriptor);
+    // or 
+    services.AddTransient<IBankManager, BankManager>();
 
     // Add MVC services to the services container.
     services.AddMvc();
@@ -54,7 +56,7 @@ They created interfaces which correspond to lifetime scopes. So every service in
 Im my case it looks like below - interfaces correspond exactly to `ServiceLifetime` enum.
 
 ```c#
-// This one describes all dependencies
+// Tou can use it to get all dependencies
 public interface IDependency
 {
 }
@@ -113,6 +115,28 @@ public void ConfigureServices(IServiceCollection services)
     services.AddMvc();
 }
 ```
+
+### Repleace dependency
+There is possible to override implementaion of service (decorate) which was registered. You can do that by `RepleaceDependecyAttribute` (see exapmle below)
+```c#
+[RepleaceDependecy(typeof(BankManager))]
+public class AuditBankManager : BankManager
+{
+    // Suppose that OpenAccount is virtual
+    public override int OpenAccount(string clientName)
+    {
+        // Do audit...
+        
+        var accountNumber = base.OpenAccount(clientName);
+        
+        // Do more audit...
+        
+        return accountNumber;
+    }
+}
+```
+
+*TODO:*  Add posibility to override services which already exists in `ServicesCollection'
 
 ## Integrations
 
