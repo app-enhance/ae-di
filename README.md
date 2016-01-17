@@ -78,6 +78,17 @@ public interface INotRegisterDependency
 {
 }
 ```
+## Goals/Features
+
+- [x] [Declarative way of defining lifetime scope](https://github.com/app-enhance/ae-di#how-does-it-work)
+- [x] [Retrieval servies from assemblies](https://github.com/app-enhance/ae-di#how-does-it-work)
+- [ ] [Repleace dependencies (Decorate)](https://github.com/app-enhance/ae-di#repleace-dependency)
+  - [ ] Repleace already registered services
+  - [x] Repleace dependencies from declarative way
+- [ ] [Proxing whole interfaces](https://github.com/app-enhance/ae-di#create-proxy-over-service)
+- [ ] [Integrations with popular containers](https://github.com/app-enhance/ae-di#integrations)
+  - [ ] [Autofac](https://github.com/app-enhance/ae-di#autofac)
+  - [ ] [Ninject](https://github.com/app-enhance/ae-di#ninject)
 
 ## How does it work?
 
@@ -137,6 +148,9 @@ public class AuditBankManager : BankManager
 ```
 
 *TODO:*  Add possibility to override services which already exists in `ServicesCollection'
+
+### Create proxy over service
+(todo)
 
 ## Integrations
 
