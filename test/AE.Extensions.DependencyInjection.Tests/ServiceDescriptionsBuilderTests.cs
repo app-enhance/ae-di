@@ -4,20 +4,23 @@
     using System.Linq;
     using System.Reflection;
 
+    using BuildDependencies;
+
     using Microsoft.Extensions.DependencyInjection;
 
     using Xunit;
 
-    public class ServiceDescriberTests
+    public class ServiceDescriptionsBuilderTests
     {
         [Fact]
         public void When_Assembly_has_services_describer_should_describe_them_correct()
         {
             // Arrange
             var assembly = GetTestAssembly();
+            var builder = new ServiceDescriptionsBuilder().AddSourceAssembly(assembly);
 
             // Act
-            var serviceDescriptions = ServicesDescriber.DescribeFromAssemblies(assembly);
+            var serviceDescriptions = builder.Build();
 
             // Assert
             var description = serviceDescriptions.First();
@@ -31,9 +34,10 @@
         {
             // Arrange
             var assembly = GetTestAssembly();
+            var builder = new ServiceDescriptionsBuilder().AddSourceAssembly(assembly);
 
             // Act
-            var serviceDescriptions = ServicesDescriber.DescribeFromAssemblies(assembly);
+            var serviceDescriptions = builder.Build();
 
             // Assert
             Assert.Contains(
@@ -51,9 +55,10 @@
         {
             // Arrange
             var assembly = GetTestAssembly();
+            var builder = new ServiceDescriptionsBuilder().AddSourceAssembly(assembly);
 
             // Act
-            var serviceDescriptions = ServicesDescriber.DescribeFromAssemblies(assembly);
+            var serviceDescriptions = builder.Build();
 
             // Assert
             Assert.Contains(
@@ -64,7 +69,7 @@
 
         private Assembly GetTestAssembly()
         {
-            return typeof(ServiceDescriberTests).GetTypeInfo().Assembly;
+            return typeof(ServiceDescriptionsBuilderTests).GetTypeInfo().Assembly;
         }
 
         private ServiceDescriptor CreateServiceDescriptor<TInterface, TImplementation>(ServiceLifetime lifetime)

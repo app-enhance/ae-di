@@ -118,7 +118,8 @@ public class BankManager : IBankManager
 public void ConfigureServices(IServiceCollection services)
 {
     var assemblies = ... Get all assemblies ex. by ILibraryLoader or Assembly.GetExecutingAssembly(...) etc.
-    var serviceDescriptors = ServicesDescriber.DescribeFromAssemblies(assemblies);
+    var descriptionsBuilder = new ServiceDescriptionsBuilder().AddSourceAssemblies(assemblies);
+    var serviceDescriptors = descriptionsBuilder.Build();
 
     services.AddRange(serviceDescriptors);
  

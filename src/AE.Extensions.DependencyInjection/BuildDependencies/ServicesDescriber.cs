@@ -1,4 +1,4 @@
-﻿namespace AE.Extensions.DependencyInjection
+﻿namespace AE.Extensions.DependencyInjection.BuildDependencies
 {
     using System;
     using System.Collections.Generic;
@@ -7,7 +7,7 @@
 
     using Microsoft.Extensions.DependencyInjection;
 
-    public static class ServicesDescriber
+    internal static class ServicesDescriber
     {
         private static readonly Type DependencyType = typeof(IDependency);
 

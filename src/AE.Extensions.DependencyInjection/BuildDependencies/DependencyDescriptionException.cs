@@ -1,4 +1,4 @@
-﻿namespace AE.Extensions.DependencyInjection
+﻿namespace AE.Extensions.DependencyInjection.BuildDependencies
 {
     using System;
 
