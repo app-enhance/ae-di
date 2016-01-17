@@ -11,24 +11,38 @@
     {
         private readonly HashSet<Assembly> _sourceAssemblies;
 
+        private readonly List<ITypeFilter> _typesfilterss;
+
         private readonly List<ITypesProvider> _typesProviders;
 
         public ServiceDescriptionsBuilder()
         {
             _sourceAssemblies = new HashSet<Assembly>();
             _typesProviders = new List<ITypesProvider> { new TypesFromAssembliesProvider(() => _sourceAssemblies) };
+            _typesfilterss = new List<ITypeFilter>
+                                 {
+                                     new InstanceDependenciesOnlyTypeFilter(),
+                                     new RepleaceDependencyFilter(() => _sourceAssemblies.SelectMany(x => x.ExportedTypes))
+                                 };
         }
 
         public ServiceDescriptionsBuilder(IEnumerable<ITypesProvider> typesProviders)
             : this()
         {
-            if ((typesProviders == null) || (typesProviders.Any() == false))
-            {
-                throw new ArgumentNullException(nameof(typesProviders));
-            }
+            ConfigureTypeProviders(typesProviders);
+        }
 
-            _typesProviders.Clear();
-            _typesProviders.AddRange(typesProviders);
+        public ServiceDescriptionsBuilder(IEnumerable<ITypeFilter> typesFilters)
+            : this()
+        {
+            ConfigureTypeFilters(typesFilters);
+        }
+
+        public ServiceDescriptionsBuilder(IEnumerable<ITypeFilter> typesFilters, IEnumerable<ITypesProvider> typesProviders)
+            : this()
+        {
+            ConfigureTypeProviders(typesProviders);
+            ConfigureTypeFilters(typesFilters);
         }
 
         public ServiceDescriptionsBuilder AddSourceAssembly(Assembly sourceAssembly)
@@ -49,30 +63,59 @@
             return this;
         }
 
+        public ServiceDescriptionsBuilder AddTypesFilter(ITypeFilter filter)
+        {
+            _typesfilterss.Add(filter);
+            return this;
+        }
+
         public IEnumerable<ServiceDescriptor> Build()
         {
             var typesToRegistration = GetTypesToRegistration();
-
-            var filteredTypes = RemoveRepleacedTypes(typesToRegistration);
-
-            return ServicesDescriber.Describe(filteredTypes);
+            return ServicesDescriber.Describe(typesToRegistration);
         }
 
         private IEnumerable<Type> GetTypesToRegistration()
         {
-            return _typesProviders.SelectMany(provider => provider.RetrieveTypes());
+            var conjunctionFilter = new ConjunctionFilter(_typesfilterss);
+            return _typesProviders.SelectMany(provider => provider.RetrieveTypes(conjunctionFilter));
         }
 
-        private IEnumerable<Type> RemoveRepleacedTypes(IEnumerable<Type> typesToRegistration)
+        private void ConfigureTypeProviders(IEnumerable<ITypesProvider> typesProviders)
         {
-            var repleacedTypes = FindRepleacedTypes(typesToRegistration);
-            return typesToRegistration.Where(x => repleacedTypes.Contains(x) == false);
+            if ((typesProviders == null) || (typesProviders.Any() == false))
+            {
+                throw new ArgumentNullException(nameof(typesProviders));
+            }
+
+            _typesProviders.Clear();
+            _typesProviders.AddRange(typesProviders);
         }
 
-        private IEnumerable<Type> FindRepleacedTypes(IEnumerable<Type> types)
+        private void ConfigureTypeFilters(IEnumerable<ITypeFilter> typesFilters)
         {
-            var repleaceDependencyAttibutes = types.SelectMany(x => x.GetTypeInfo().GetCustomAttributes<RepleaceDependencyAttribute>());
-            return repleaceDependencyAttibutes.Select(x => x.RepleacedType).ToList();
+            if ((typesFilters == null) || (typesFilters.Any() == false))
+            {
+                throw new ArgumentNullException(nameof(typesFilters));
+            }
+
+            _typesfilterss.Clear();
+            _typesfilterss.AddRange(typesFilters);
+        }
+
+        private class ConjunctionFilter : ITypeFilter
+        {
+            private readonly IEnumerable<ITypeFilter> _filtersToConjunction;
+
+            internal ConjunctionFilter(IEnumerable<ITypeFilter> filtersToConjunction)
+            {
+                _filtersToConjunction = filtersToConjunction;
+            }
+
+            public bool IsSatisfiedBy(Type type)
+            {
+                return _filtersToConjunction.All(x => x.IsSatisfiedBy(type));
+            }
         }
     }
 }

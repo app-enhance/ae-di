@@ -5,6 +5,6 @@
 
     public interface ITypesProvider
     {
-        IEnumerable<Type> RetrieveTypes();
+        IEnumerable<Type> RetrieveTypes(ITypeFilter filter);
     }
 }
