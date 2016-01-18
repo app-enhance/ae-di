@@ -4,7 +4,7 @@
     using System.Linq;
     using System.Reflection;
 
-    using BuildDependencies;
+    using Builder;
 
     using Microsoft.Extensions.DependencyInjection;
 

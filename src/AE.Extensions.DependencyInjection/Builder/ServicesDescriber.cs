@@ -1,4 +1,4 @@
-﻿namespace AE.Extensions.DependencyInjection.BuildDependencies
+﻿namespace AE.Extensions.DependencyInjection.Builder
 {
     using System;
     using System.Collections.Generic;
