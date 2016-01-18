@@ -1,4 +1,4 @@
-﻿{
+{
     "version": "0.0.1-*",
     "description": "AE.Extensions.DependencyInjection Class Library",
     "authors": [ "Wojtek Gadziński" ],
@@ -20,6 +20,7 @@
         "System.Runtime": "4.0.21-*",
         "System.Reflection.TypeExtensions": "4.1.0-*",
         "System.Reflection.Extensions": "4.0.1-*",
+        "System.Linq.Parallel": "4.0.1-*",
         "System.ComponentModel": "4.0.1-*",
         "Microsoft.Extensions.DependencyInjection.Abstractions": "1.0.0-*"
     }

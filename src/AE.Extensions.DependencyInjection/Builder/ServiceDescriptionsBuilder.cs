@@ -58,7 +58,7 @@
         private IEnumerable<Type> GetTypesToRegistration()
         {
             var conjunctionFilter = new ConjunctionConvention(_typesConventions);
-            return _typesProviders.SelectMany(provider => provider.RetrieveTypes(conjunctionFilter));
+            return _typesProviders.AsParallel().SelectMany(provider => provider.RetrieveTypes(conjunctionFilter));
         }
 
         private class ConjunctionConvention : ITypeConvention
@@ -72,7 +72,7 @@
 
             public bool IsSatisfiedBy(Type type)
             {
-                return _filtersToConjunction.All(x => x.IsSatisfiedBy(type));
+                return _filtersToConjunction.AsParallel().All(x => x.IsSatisfiedBy(type));
             }
         }
     }
