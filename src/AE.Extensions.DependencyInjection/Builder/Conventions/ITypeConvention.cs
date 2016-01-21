@@ -2,8 +2,8 @@
 {
     using System;
 
-    public interface ITypeConvention
+    public interface ITypeSelectionConvention : ITypeSelector
     {
-        bool IsSatisfiedBy(Type type);
+        bool DoesPostSelect(Type type);
     }
 }

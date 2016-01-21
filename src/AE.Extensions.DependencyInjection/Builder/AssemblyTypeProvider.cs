@@ -7,7 +7,7 @@ namespace AE.Extensions.DependencyInjection.Builder
 
     using Conventions;
 
-    public class AssemblyTypeProvider : ITypesProvider, IAttributesProvider
+    public class AssemblyTypeProvider : ITypesProvider
     {
         private readonly IEnumerable<Type> _sourceTypes;
 
@@ -16,15 +16,10 @@ namespace AE.Extensions.DependencyInjection.Builder
             _sourceTypes = sourceAssembly.ExportedTypes;
         }
 
-        public IEnumerable<Type> RetrieveTypes(ITypeConvention convention)
+        public IEnumerable<Type> RetrieveTypes(ITypeSelector selector)
         {
-            var typesToRegistration = _sourceTypes.Where(convention.IsSatisfiedBy).ToList();
+            var typesToRegistration = _sourceTypes.Where(selector.DoesSelect).ToList();
             return typesToRegistration;
-        }
-
-        public IEnumerable<T> GetAttributes<T>() where T : Attribute
-        {
-            return _sourceTypes.SelectMany(x => x.GetTypeInfo().GetCustomAttributes<T>());
         }
     }
 }

@@ -3,12 +3,17 @@
     using System;
     using System.Reflection;
 
-    public class InstanceClassTypeConvention : ITypeConvention
+    public class InstanceClassTypeSelectionConvention : ITypeSelectionConvention
     {
-        public bool IsSatisfiedBy(Type type)
+        public bool DoesSelect(Type type)
         {
             var typeInfo = type.GetTypeInfo();
             return typeInfo.IsClass && !typeInfo.IsAbstract && !typeInfo.IsGenericTypeDefinition;
+        }
+
+        public bool DoesPostSelect(Type type)
+        {
+            return true;
         }
     }
 }

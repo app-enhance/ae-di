@@ -10,22 +10,21 @@
 
     public class ServiceDescriptionsBuilder
     {
-        private readonly List<ITypeConvention> _typesConventions;
+        private readonly List<ITypeSelectionConvention> _typesConventions;
 
         private readonly List<ITypesProvider> _typesProviders;
 
         public ServiceDescriptionsBuilder()
         {
             _typesProviders = new List<ITypesProvider>();
-            _typesConventions = new List<ITypeConvention>
-                                 {
-                                     new InstanceClassTypeConvention(),
-                                     new DependencyTypeConvention(),
-                                     new RepleaceDependencyTypeConvention(() => _typesProviders.OfType<IAttributesProvider>())
-                                 };
+            _typesConventions = new List<ITypeSelectionConvention>
+                                    {
+                                        new InstanceClassTypeSelectionConvention(),
+                                        new DependencyTypeSelectionConvention()
+                                    };
         }
 
-        public ServiceDescriptionsBuilder(IEnumerable<ITypeConvention> typesFilters)
+        public ServiceDescriptionsBuilder(IEnumerable<ITypeSelectionConvention> typesFilters)
             : this()
         {
             if ((typesFilters == null) || (typesFilters.Any() == false))
@@ -43,9 +42,9 @@
             return this;
         }
 
-        public ServiceDescriptionsBuilder AddTypesFilter(ITypeConvention convention)
+        public ServiceDescriptionsBuilder AddTypesConvention(ITypeSelectionConvention selectionConvention)
         {
-            _typesConventions.Add(convention);
+            _typesConventions.Add(selectionConvention);
             return this;
         }
 
@@ -57,22 +56,38 @@
 
         private IEnumerable<Type> GetTypesToRegistration()
         {
-            var conjunctionFilter = new ConjunctionConvention(_typesConventions);
-            return _typesProviders.AsParallel().SelectMany(provider => provider.RetrieveTypes(conjunctionFilter));
+            var unionConvention = new UnionSelectionConvention(_typesConventions);
+            var potentialTypes = SelectPotentialTypes(_typesProviders, unionConvention);
+            return GetTypesToRegistration(potentialTypes, unionConvention);
         }
 
-        private class ConjunctionConvention : ITypeConvention
+        private IEnumerable<Type> SelectPotentialTypes(IEnumerable<ITypesProvider> typesProviders, ITypeSelector convention)
         {
-            private readonly IEnumerable<ITypeConvention> _filtersToConjunction;
+            return typesProviders.AsParallel().SelectMany(provider => provider.RetrieveTypes(convention));
+        }
 
-            internal ConjunctionConvention(IEnumerable<ITypeConvention> filtersToConjunction)
+        private static IEnumerable<Type> GetTypesToRegistration(IEnumerable<Type> potentialTypesToRegister, ITypeSelectionConvention convention)
+        {
+            return potentialTypesToRegister.AsParallel().Where(convention.DoesPostSelect);
+        }
+
+        private class UnionSelectionConvention : ITypeSelectionConvention
+        {
+            private readonly IEnumerable<ITypeSelectionConvention> _conventionsToUnion;
+
+            internal UnionSelectionConvention(IEnumerable<ITypeSelectionConvention> conventionsToUnion)
             {
-                _filtersToConjunction = filtersToConjunction;
+                _conventionsToUnion = conventionsToUnion;
             }
 
-            public bool IsSatisfiedBy(Type type)
+            public bool DoesSelect(Type type)
             {
-                return _filtersToConjunction.AsParallel().All(x => x.IsSatisfiedBy(type));
+                return _conventionsToUnion.AsParallel().All(x => x.DoesSelect(type));
+            }
+
+            public bool DoesPostSelect(Type type)
+            {
+                return _conventionsToUnion.AsParallel().All(x => x.DoesPostSelect(type));
             }
         }
     }

@@ -7,6 +7,6 @@
 
     public interface ITypesProvider
     {
-        IEnumerable<Type> RetrieveTypes(ITypeConvention convention);
+        IEnumerable<Type> RetrieveTypes(ITypeSelector selector);
     }
 }

@@ -1,7 +1,7 @@
 ﻿namespace AE.Extensions.DependencyInjection.Tests
 {
     using System.Collections.Generic;
-    using System.Linq;
+    using System.Diagnostics;
     using System.Reflection;
 
     using Builder;
@@ -23,10 +23,10 @@
             var serviceDescriptions = builder.Build();
 
             // Assert
-            var description = serviceDescriptions.First();
-            Assert.Equal(ServiceLifetime.Scoped, description.Lifetime);
-            Assert.Equal(typeof(ITestDependency), description.ServiceType);
-            Assert.Equal(typeof(TestServiceDependency), description.ImplementationType);
+            Assert.Contains(
+                CreateServiceDescriptor<ITestDependency, TestServiceDependency>(ServiceLifetime.Transient),
+                serviceDescriptions,
+                new ServiceDescriptorComparer());
         }
 
         [Fact]
@@ -67,6 +67,30 @@
                 new ServiceDescriptorComparer());
         }
 
+        [Fact]
+        public void Builder_build_descriptors_from_assembly_in_less_that_10ms()
+        {
+            // Arrange
+            var assembly = GetTestAssembly();
+            var builder = new ServiceDescriptionsBuilder().AddSourceAssembly(assembly);
+            var attempts = 10000;
+            var watch = new Stopwatch();
+            var elapsedMilliseconds = 0L;
+
+            // Act
+            for (int i = 0; i < attempts; i++)
+            {
+                builder = new ServiceDescriptionsBuilder().AddSourceAssembly(assembly);
+                watch.Restart();
+                builder.Build();
+                watch.Stop();
+                elapsedMilliseconds += watch.ElapsedMilliseconds;
+            }
+
+            // Assert
+            Assert.True(10 >= elapsedMilliseconds / attempts);
+        }
+
         private Assembly GetTestAssembly()
         {
             return typeof(ServiceDescriptionsBuilderTests).GetTypeInfo().Assembly;
@@ -77,7 +101,7 @@
             return new ServiceDescriptor(typeof(TInterface), typeof(TImplementation), lifetime);
         }
 
-        public interface ITestDependency : IScopedDependency
+        public interface ITestDependency : ITransientDependency
         {
         }
 
