@@ -5,6 +5,7 @@
     using System.Reflection;
 
     using Builder;
+    using CorrectAssembly;
 
     using Microsoft.Extensions.DependencyInjection;
 
@@ -93,7 +94,7 @@
 
         private Assembly GetTestAssembly()
         {
-            return typeof(ServiceDescriptionsBuilderTests).GetTypeInfo().Assembly;
+            return typeof(ITestDependency).GetTypeInfo().Assembly;
         }
 
         private ServiceDescriptor CreateServiceDescriptor<TInterface, TImplementation>(ServiceLifetime lifetime)
@@ -101,34 +102,6 @@
             return new ServiceDescriptor(typeof(TInterface), typeof(TImplementation), lifetime);
         }
 
-        public interface ITestDependency : ITransientDependency
-        {
-        }
-
-        public class TestServiceDependency : ITestDependency
-        {
-        }
-
-        public interface IRepleaceDependency : IScopedDependency
-        {
-        }
-
-        public class RepleacedTestService : IRepleaceDependency
-        {
-        }
-
-        [RepleaceDependency(typeof(RepleacedTestService))]
-        public class RepleacingTestService : RepleacedTestService
-        {
-        }
-
-        public interface IGeneric<T> : IScopedDependency
-        {
-        }
-
-        public class TestGenericService : IGeneric<int>
-        {
-        }
 
         private class ServiceDescriptorComparer : IEqualityComparer<ServiceDescriptor>
         {
