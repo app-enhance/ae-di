@@ -24,16 +24,16 @@
                                     };
         }
 
-        public ServiceDescriptionsBuilder(IEnumerable<ITypeSelectionConvention> typesFilters)
+        public ServiceDescriptionsBuilder(IEnumerable<ITypeSelectionConvention> selectionConventions)
             : this()
         {
-            if ((typesFilters == null) || (typesFilters.Any() == false))
+            if ((selectionConventions == null) || (selectionConventions.Any() == false))
             {
-                throw new ArgumentNullException(nameof(typesFilters));
+                throw new ArgumentNullException(nameof(selectionConventions));
             }
 
             _typesConventions.Clear();
-            _typesConventions.AddRange(typesFilters);
+            _typesConventions.AddRange(selectionConventions);
         }
 
         public ServiceDescriptionsBuilder AddTypesProvider(ITypesProvider typesProvider)

@@ -14,7 +14,17 @@
     public class ServiceDescriptionsBuilderTests
     {
         [Fact]
-        public void When_Assembly_has_services_describer_should_describe_them_correct()
+        public void Builder_works_correct_even_when_there_is_any_assembly_definied()
+        {
+            // Arrange
+            var builder = new ServiceDescriptionsBuilder();
+
+            // Act
+            builder.Build();
+        }
+
+        [Fact]
+        public void When_Assembly_has_services_then_builder_should_describe_them_correct()
         {
             // Arrange
             var assembly = GetTestAssembly();
@@ -31,7 +41,7 @@
         }
 
         [Fact]
-        public void When_exists_service_with_RepleaceDependecy_Describer_should_describe_only_this_one()
+        public void When_exists_service_with_RepleaceDependecy_then_builder_should_describe_only_this_one()
         {
             // Arrange
             var assembly = GetTestAssembly();
@@ -52,7 +62,7 @@
         }
 
         [Fact]
-        public void Describer_describe_generics_in_correct_way()
+        public void Builder_describe_generics_in_correct_way()
         {
             // Arrange
             var assembly = GetTestAssembly();
