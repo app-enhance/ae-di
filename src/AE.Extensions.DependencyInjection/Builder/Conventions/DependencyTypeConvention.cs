@@ -4,7 +4,7 @@
     using System.Collections.Generic;
     using System.Reflection;
 
-    public class DependencyTypeSelectionConvention : ITypeSelectionConvention
+    public class DependencyTypeSelectionConvention : TypeSelectionConvention
     {
         private readonly Type _dependencyType = typeof(IDependency);
 
@@ -17,7 +17,7 @@
             _repleacedDependencies = new HashSet<Type>();
         }
 
-        public bool DoesSelect(Type type)
+        public override bool DoesSelect(Type type)
         {
             var doesRegister = _dependencyType.IsAssignableFrom(type) && !_notRegisterDependencyType.IsAssignableFrom(type);
             if (doesRegister)
@@ -28,7 +28,7 @@
             return doesRegister;
         }
 
-        public bool DoesPostSelect(Type type)
+        public override bool DoesPostSelect(Type type)
         {
             return _repleacedDependencies.Contains(type) == false;
         }

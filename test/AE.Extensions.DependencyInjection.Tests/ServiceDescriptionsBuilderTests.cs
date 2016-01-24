@@ -137,14 +137,9 @@
             return new ServiceDescriptor(typeof(TInterface), typeof(TImplementation), lifetime);
         }
 
-        private class CorrectTestServicesConvention : ITypeSelectionConvention
+        private class CorrectTestServicesConvention : TypeSelectionConvention
         {
-            public bool DoesPostSelect(Type type)
-            {
-                return true;
-            }
-
-            public virtual bool DoesSelect(Type type)
+            public override bool DoesSelect(Type type)
             {
                 var @namespace = type.Namespace;
                 var isCorrect = @namespace.EndsWith("Incorrect") == false && @namespace.Contains("TestServices");
