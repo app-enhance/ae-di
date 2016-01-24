@@ -118,15 +118,14 @@ public class BankManager : IBankManager
 public void ConfigureServices(IServiceCollection services)
 {
     var assemblies = ... Get all assemblies ex. by ILibraryLoader or Assembly.GetExecutingAssembly(...) etc.
-    var descriptionsBuilder = new ServiceDescriptionsBuilder().AddSourceAssemblies(assemblies);
-    var serviceDescriptors = descriptionsBuilder.Build();
-
-    services.AddRange(serviceDescriptors);
+    services.AddFromAssemblies(assemblies);
  
     // Add MVC services to the services container.
     services.AddMvc();
 }
 ```
+
+There are many custom ways to use service description builder. Most cases described [here](https://github.com/app-enhance/ae-di/wiki/Custom-usage-of-service-descriptions-builder)
 
 ### Repleace dependency
 There is possible to override implementaion of service (decorate) which was registered. You can do that by `RepleaceDependecyAttribute` (see exapmle below)

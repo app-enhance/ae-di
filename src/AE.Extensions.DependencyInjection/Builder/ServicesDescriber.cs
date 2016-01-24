@@ -24,7 +24,7 @@
             }
             catch (AggregateException e)
             {
-                throw e.FlattenAndCast<DependencyDescriptionException>();
+                throw e.FlattenTryBubbleUp();
             }
         }
 

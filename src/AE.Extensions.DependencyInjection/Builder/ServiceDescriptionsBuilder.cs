@@ -61,7 +61,7 @@
             return GetTypesToRegistration(potentialTypes, unionConvention);
         }
 
-        private IEnumerable<Type> SelectPotentialTypes(IEnumerable<ITypesProvider> typesProviders, ITypeSelector convention)
+        private static IEnumerable<Type> SelectPotentialTypes(IEnumerable<ITypesProvider> typesProviders, ITypeSelector convention)
         {
             try
             {
@@ -70,7 +70,7 @@
             }
             catch (AggregateException e)
             {
-                throw e.FlattenAndCast<DependencyDescriptionException>();
+                throw e.FlattenTryBubbleUp();
             }
         }
 
@@ -83,7 +83,7 @@
             }
             catch (AggregateException e)
             {
-                throw e.FlattenAndCast<DependencyDescriptionException>();
+                throw e.FlattenTryBubbleUp();
             }
         }
 
