@@ -20,7 +20,7 @@
         public void Builder_works_correct_even_when_there_is_any_assembly_definied()
         {
             // Arrange
-            var builder = new ServiceDescriptionsBuilder();
+            var builder = new ServiceDescriptorsBuilder();
 
             // Act
             builder.Build();
@@ -31,7 +31,7 @@
         {
             // Arrange
             var assembly = GetTestCorrectAssembly();
-            var builder = new ServiceDescriptionsBuilder().AddSourceAssembly(assembly);
+            var builder = new ServiceDescriptorsBuilder().AddSourceAssembly(assembly);
 
             // Act
             var serviceDescriptions = builder.Build();
@@ -48,7 +48,7 @@
         {
             // Arrange
             var assembly = GetTestCorrectAssembly();
-            var builder = new ServiceDescriptionsBuilder().AddSourceAssembly(assembly);
+            var builder = new ServiceDescriptorsBuilder().AddSourceAssembly(assembly);
 
             // Act
             var serviceDescriptions = builder.Build();
@@ -69,7 +69,7 @@
         {
             // Arrange
             var assembly = GetTestCorrectAssembly();
-            var builder = new ServiceDescriptionsBuilder().AddSourceAssembly(assembly);
+            var builder = new ServiceDescriptorsBuilder().AddSourceAssembly(assembly);
 
             // Act
             var serviceDescriptions = builder.Build();
@@ -86,7 +86,7 @@
         {
             // Arrange
             var assembly = GetTestIncorrectAssembly();
-            var builder = new ServiceDescriptionsBuilder().AddSourceAssembly(assembly);
+            var builder = new ServiceDescriptorsBuilder().AddSourceAssembly(assembly);
 
             // Act & Assert
             var exception = Assert.Throws<DependencyDescriptionException>(() => builder.Build());
@@ -98,7 +98,7 @@
         {
             // Arrange
             var assembly = GetTestCorrectAssembly();
-            var builder = new ServiceDescriptionsBuilder().AddSourceAssembly(assembly);
+            var builder = new ServiceDescriptorsBuilder().AddSourceAssembly(assembly);
             var attempts = 10000;
             var watch = new Stopwatch();
             var elapsedMilliseconds = 0L;
@@ -106,7 +106,7 @@
             // Act
             for (var i = 0; i < attempts; i++)
             {
-                builder = new ServiceDescriptionsBuilder().AddSourceAssembly(assembly);
+                builder = new ServiceDescriptorsBuilder().AddSourceAssembly(assembly);
                 watch.Restart();
                 builder.Build();
                 watch.Stop();

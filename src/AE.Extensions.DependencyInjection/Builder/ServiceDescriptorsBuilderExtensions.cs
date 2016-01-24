@@ -4,7 +4,7 @@
 
     public static class ServiceDescriptorsBuilderExtensions
     {
-        public static ServiceDescriptionsBuilder AddSourceAssemblies(this ServiceDescriptionsBuilder builder, params Assembly[] sourceAssemblies)
+        public static ServiceDescriptorsBuilder AddSourceAssemblies(this ServiceDescriptorsBuilder builder, params Assembly[] sourceAssemblies)
         {
             foreach (var sourceAssembly in sourceAssemblies)
             {
@@ -14,7 +14,7 @@
             return builder;
         }
 
-        public static ServiceDescriptionsBuilder AddSourceAssembly(this ServiceDescriptionsBuilder builder, Assembly sourceAssembly)
+        public static ServiceDescriptorsBuilder AddSourceAssembly(this ServiceDescriptorsBuilder builder, Assembly sourceAssembly)
         {
             builder.AddTypesProvider(new AssemblyTypeProvider(sourceAssembly));
             return builder;

@@ -8,7 +8,7 @@
     {
         public static IServiceCollection AddFromAssemblies(this IServiceCollection serviceCollection, Assembly[] assebmlies)
         {
-            var builder = new ServiceDescriptionsBuilder().AddSourceAssemblies(assebmlies);
+            var builder = new ServiceDescriptorsBuilder().AddSourceAssemblies(assebmlies);
             BuildAndFill(serviceCollection, builder);
 
             return serviceCollection;
@@ -16,16 +16,16 @@
 
         public static IServiceCollection AddFromAssembly(this IServiceCollection serviceCollection, Assembly assembly)
         {
-            var builder = new ServiceDescriptionsBuilder().AddSourceAssembly(assembly);
+            var builder = new ServiceDescriptorsBuilder().AddSourceAssembly(assembly);
             BuildAndFill(serviceCollection, builder);
 
             return serviceCollection;
         }
 
-        private static void BuildAndFill(IServiceCollection serviceCollection, ServiceDescriptionsBuilder builder)
+        private static void BuildAndFill(IServiceCollection serviceCollection, ServiceDescriptorsBuilder builder)
         {
-            var serviceDescriptions = builder.Build();
-            foreach (var descriptor in serviceDescriptions)
+            var serviceDescriptors = builder.Build();
+            foreach (var descriptor in serviceDescriptors)
             {
                 serviceCollection.Add(descriptor);
             }

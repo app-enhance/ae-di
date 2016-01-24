@@ -8,13 +8,13 @@
 
     using Microsoft.Extensions.DependencyInjection;
 
-    public class ServiceDescriptionsBuilder
+    public class ServiceDescriptorsBuilder
     {
         private readonly List<ITypeSelectionConvention> _typesConventions;
 
         private readonly List<ITypesProvider> _typesProviders;
 
-        public ServiceDescriptionsBuilder()
+        public ServiceDescriptorsBuilder()
         {
             _typesProviders = new List<ITypesProvider>();
             _typesConventions = new List<ITypeSelectionConvention>
@@ -24,7 +24,7 @@
                                     };
         }
 
-        public ServiceDescriptionsBuilder(IEnumerable<ITypeSelectionConvention> selectionConventions)
+        public ServiceDescriptorsBuilder(IEnumerable<ITypeSelectionConvention> selectionConventions)
             : this()
         {
             if ((selectionConventions == null) || (selectionConventions.Any() == false))
@@ -36,13 +36,13 @@
             _typesConventions.AddRange(selectionConventions);
         }
 
-        public ServiceDescriptionsBuilder AddTypesProvider(ITypesProvider typesProvider)
+        public ServiceDescriptorsBuilder AddTypesProvider(ITypesProvider typesProvider)
         {
             _typesProviders.Add(typesProvider);
             return this;
         }
 
-        public ServiceDescriptionsBuilder AddTypesConvention(ITypeSelectionConvention selectionConvention)
+        public ServiceDescriptorsBuilder AddTypesConvention(ITypeSelectionConvention selectionConvention)
         {
             _typesConventions.Add(selectionConvention);
             return this;
