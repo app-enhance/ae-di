@@ -17,25 +17,28 @@
 
         public static IEnumerable<ServiceDescriptor> Describe(IEnumerable<Type> typesToRegistration)
         {
-            var serviceDescriptors = CreateDescriptors(typesToRegistration);
-
-            return serviceDescriptors;
+            try
+            {
+                var serviceDescriptors = typesToRegistration.AsParallel().SelectMany(CreateDescriptors);
+                return serviceDescriptors.ToList();
+            }
+            catch (AggregateException e)
+            {
+                throw e.FlattenAndCast<DependencyDescriptionException>();
+            }
         }
 
-        private static IEnumerable<ServiceDescriptor> CreateDescriptors(IEnumerable<Type> typesToRegistration)
+        private static IEnumerable<ServiceDescriptor> CreateDescriptors(Type type)
         {
-            foreach (var type in typesToRegistration)
+            var interfaces = type.GetInterfaces();
+            var scope = RetieveScope(interfaces);
+
+            foreach (var @interface in interfaces)
             {
-                var interfaces = type.GetInterfaces();
-                var scope = RetieveScope(interfaces);
-
-                foreach (var @interface in interfaces)
-                {
-                    yield return new ServiceDescriptor(@interface, type, scope);
-                }
-
-                yield return new ServiceDescriptor(type, type, scope);
+                yield return new ServiceDescriptor(@interface, type, scope);
             }
+
+            yield return new ServiceDescriptor(type, type, scope);
         }
 
         private static ServiceLifetime RetieveScope(IEnumerable<Type> interfaces)

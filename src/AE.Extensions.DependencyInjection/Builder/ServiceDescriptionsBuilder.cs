@@ -63,12 +63,28 @@
 
         private IEnumerable<Type> SelectPotentialTypes(IEnumerable<ITypesProvider> typesProviders, ITypeSelector convention)
         {
-            return typesProviders.AsParallel().SelectMany(provider => provider.RetrieveTypes(convention));
+            try
+            {
+                var potentialTypes = typesProviders.AsParallel().SelectMany(provider => provider.RetrieveTypes(convention));
+                return potentialTypes.ToList();
+            }
+            catch (AggregateException e)
+            {
+                throw e.FlattenAndCast<DependencyDescriptionException>();
+            }
         }
 
         private static IEnumerable<Type> GetTypesToRegistration(IEnumerable<Type> potentialTypesToRegister, ITypeSelectionConvention convention)
         {
-            return potentialTypesToRegister.AsParallel().Where(convention.DoesPostSelect);
+            try
+            {
+                var typesToregistration = potentialTypesToRegister.AsParallel().Where(convention.DoesPostSelect);
+                return typesToregistration.ToList();
+            }
+            catch (AggregateException e)
+            {
+                throw e.FlattenAndCast<DependencyDescriptionException>();
+            }
         }
 
         private class UnionSelectionConvention : ITypeSelectionConvention
