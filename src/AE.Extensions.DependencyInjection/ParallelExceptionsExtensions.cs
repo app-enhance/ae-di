@@ -5,15 +5,28 @@
 
     internal static class ParallelExceptionsExtensions
     {
-        public static T FlattenAndCast<T>(this AggregateException e) where T : Exception, new()
+        public static Exception FlattenAndCast<T>(this AggregateException e) where T : Exception, new()
         {
             var flattenException = e.Flatten();
+
+            return TryBubbleUpException<T>(flattenException)
+                   ?? CreateException<T>("Unhandled exceptions during paraller operations", flattenException);
+        }
+
+        private static Exception TryBubbleUpException<T>(AggregateException flattenException) where T : Exception, new()
+        {
             if (flattenException.InnerExceptions.Count == 1)
             {
-                return Activator.CreateInstance(typeof(T), new[] { flattenException.InnerExceptions.First().Message }) as T;
+                var exception = flattenException.InnerExceptions.First();
+                return exception is T ? exception : CreateException<T>(exception.Message, exception);
             }
 
-            return Activator.CreateInstance(typeof(T), new object[] { "Unhandled exceptions during descrive service type", flattenException }) as T;
+            return null;
+        }
+
+        private static Exception CreateException<T>(params object[] parameters)
+        {
+            return Activator.CreateInstance(typeof(T), parameters) as Exception;
         }
     }
 }
