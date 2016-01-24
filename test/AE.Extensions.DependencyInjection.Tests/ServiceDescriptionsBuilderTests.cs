@@ -1,16 +1,15 @@
 ﻿namespace AE.Extensions.DependencyInjection.Tests
 {
-    using System.Collections.Generic;
+    using System;
     using System.Diagnostics;
     using System.Reflection;
 
     using Builder;
-
-    using CorrectAssembly;
-
-    using IncorrectAssembly;
+    using Builder.Conventions;
 
     using Microsoft.Extensions.DependencyInjection;
+
+    using TestServices;
 
     using Xunit;
 
@@ -30,8 +29,7 @@
         public void When_Assembly_has_services_then_builder_should_describe_them_correct()
         {
             // Arrange
-            var assembly = GetTestCorrectAssembly();
-            var builder = new ServiceDescriptorsBuilder().AddSourceAssembly(assembly);
+            var builder = CorrectBuilder();
 
             // Act
             var serviceDescriptions = builder.Build();
@@ -47,8 +45,7 @@
         public void When_exists_service_with_RepleaceDependecy_then_builder_should_describe_only_this_one()
         {
             // Arrange
-            var assembly = GetTestCorrectAssembly();
-            var builder = new ServiceDescriptorsBuilder().AddSourceAssembly(assembly);
+            var builder = CorrectBuilder();
 
             // Act
             var serviceDescriptions = builder.Build();
@@ -68,8 +65,7 @@
         public void Builder_describe_generics_in_correct_way()
         {
             // Arrange
-            var assembly = GetTestCorrectAssembly();
-            var builder = new ServiceDescriptorsBuilder().AddSourceAssembly(assembly);
+            var builder = CorrectBuilder();
 
             // Act
             var serviceDescriptions = builder.Build();
@@ -85,8 +81,7 @@
         public void Single_implementation_cannot_inherit_more_than_one_lifetime_scope()
         {
             // Arrange
-            var assembly = GetTestIncorrectAssembly();
-            var builder = new ServiceDescriptorsBuilder().AddSourceAssembly(assembly);
+            var builder = IncorrectBuilder();
 
             // Act & Assert
             var exception = Assert.Throws<DependencyDescriptionException>(() => builder.Build());
@@ -97,8 +92,7 @@
         public void Builder_build_descriptors_from_assembly_in_less_that_10ms()
         {
             // Arrange
-            var assembly = GetTestCorrectAssembly();
-            var builder = new ServiceDescriptorsBuilder().AddSourceAssembly(assembly);
+            var builder = CorrectBuilder();
             var attempts = 10000;
             var watch = new Stopwatch();
             var elapsedMilliseconds = 0L;
@@ -106,7 +100,7 @@
             // Act
             for (var i = 0; i < attempts; i++)
             {
-                builder = new ServiceDescriptorsBuilder().AddSourceAssembly(assembly);
+                builder = CorrectBuilder();
                 watch.Restart();
                 builder.Build();
                 watch.Stop();
@@ -117,37 +111,52 @@
             Assert.True(10 >= elapsedMilliseconds / attempts);
         }
 
-        private Assembly GetTestCorrectAssembly()
+        private static Assembly GetTestAssembly()
         {
             return typeof(ITestDependency).GetTypeInfo().Assembly;
         }
 
-        private Assembly GetTestIncorrectAssembly()
+        private static ServiceDescriptorsBuilder CorrectBuilder()
         {
-            return typeof(IInheritMoreThanOnleLifeTimeScopeService).GetTypeInfo().Assembly;
+            var assembly = GetTestAssembly();
+            var builder = new ServiceDescriptorsBuilder().AddSourceAssembly(assembly);
+
+            return builder.AddTypesConvention(new CorrectTestServicesConvention());
         }
 
-        private ServiceDescriptor CreateServiceDescriptor<TInterface, TImplementation>(ServiceLifetime lifetime)
+        private static ServiceDescriptorsBuilder IncorrectBuilder()
+        {
+            var assembly = GetTestAssembly();
+            var builder = new ServiceDescriptorsBuilder().AddSourceAssembly(assembly);
+
+            return builder.AddTypesConvention(new IncorrectTestServicesConvention());
+        }
+
+        private static ServiceDescriptor CreateServiceDescriptor<TInterface, TImplementation>(ServiceLifetime lifetime)
         {
             return new ServiceDescriptor(typeof(TInterface), typeof(TImplementation), lifetime);
         }
 
-        private class ServiceDescriptorComparer : IEqualityComparer<ServiceDescriptor>
+        private class CorrectTestServicesConvention : ITypeSelectionConvention
         {
-            public bool Equals(ServiceDescriptor x, ServiceDescriptor y)
+            public bool DoesPostSelect(Type type)
             {
-                return ReferenceEquals(x, y)
-                       || (x.ServiceType == y.ServiceType && x.ImplementationType == y.ImplementationType && x.Lifetime == y.Lifetime);
+                return true;
             }
 
-            public int GetHashCode(ServiceDescriptor obj)
+            public virtual bool DoesSelect(Type type)
             {
-                var hashCode = 17;
-                hashCode = (hashCode * 7) + obj.ServiceType.GetHashCode();
-                hashCode = (hashCode * 7) + obj.ImplementationType.GetHashCode();
-                hashCode = (hashCode * 7) + obj.Lifetime.GetHashCode();
+                var @namespace = type.Namespace;
+                var isCorrect = @namespace.EndsWith("Incorrect") == false && @namespace.Contains("TestServices");
+                return isCorrect;
+            }
+        }
 
-                return hashCode;
+        private class IncorrectTestServicesConvention : CorrectTestServicesConvention
+        {
+            public override bool DoesSelect(Type type)
+            {
+                return base.DoesSelect(type) == false;
             }
         }
     }

@@ -38,12 +38,22 @@
 
         public ServiceDescriptorsBuilder AddTypesProvider(ITypesProvider typesProvider)
         {
+            if (typesProvider == null)
+            {
+                throw new ArgumentNullException(nameof(typesProvider));
+            }
+
             _typesProviders.Add(typesProvider);
             return this;
         }
 
         public ServiceDescriptorsBuilder AddTypesConvention(ITypeSelectionConvention selectionConvention)
         {
+            if (selectionConvention == null)
+            {
+                throw new ArgumentNullException(nameof(selectionConvention));
+            }
+
             _typesConventions.Add(selectionConvention);
             return this;
         }
