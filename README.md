@@ -53,10 +53,10 @@ They make our life easier but what about our own custom services ? What if you h
 
 I'm inspired by how Orchard team resolves that issue. 
 They created interfaces which correspond to lifetime scopes. So every service interface inherits appropriate "scope interface" and describes dependencies to register in global container.
-Im my case it looks like below - interfaces correspond exactly to `ServiceLifetime` enum.
+In my case it looks like below - interfaces correspond exactly to `ServiceLifetime` enum.
 
 ```c#
-// Tou can use it to get all dependencies
+// You can use it to get all dependencies
 public interface IDependency
 {
 }
