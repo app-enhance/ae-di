@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Reflection;
 
     public class DependencyTypeSelectionConvention : TypeSelectionConvention
@@ -10,27 +11,32 @@
 
         private readonly Type _notRegisterDependencyType = typeof(INotRegisterDependency);
 
-        private readonly HashSet<Type> _repleacedDependencies;
+        private readonly Dictionary<Type, Type> _repleacedDependencies;
+
+        private readonly List<Type> _replecingOccured;
 
         public DependencyTypeSelectionConvention()
         {
-            _repleacedDependencies = new HashSet<Type>();
+            _repleacedDependencies = new Dictionary<Type, Type>();
+            _replecingOccured = new List<Type>();
         }
 
         public override bool DoesSelect(Type type)
         {
-            var doesRegister = _dependencyType.IsAssignableFrom(type) && !_notRegisterDependencyType.IsAssignableFrom(type);
-            if (doesRegister)
+            var doesSelect = _dependencyType.IsAssignableFrom(type) && !_notRegisterDependencyType.IsAssignableFrom(type);
+            if (doesSelect)
             {
                 MemorizeRepleacedDependencyIfExist(type);
             }
 
-            return doesRegister;
+            return doesSelect;
         }
 
         public override bool DoesPostSelect(Type type)
         {
-            return _repleacedDependencies.Contains(type) == false;
+            TryThrowExceptionWhenRepleaceDependencyOccurMoreThanOne(type);
+
+            return _repleacedDependencies.Values.Contains(type) == false;
         }
 
         private void MemorizeRepleacedDependencyIfExist(Type type)
@@ -38,7 +44,21 @@
             var attribute = type.GetTypeInfo().GetCustomAttribute<RepleaceDependencyAttribute>();
             if (attribute != null)
             {
-                _repleacedDependencies.Add(attribute.RepleacedType);
+                _repleacedDependencies.Add(type, attribute.RepleacedType);
+            }
+        }
+
+        private void TryThrowExceptionWhenRepleaceDependencyOccurMoreThanOne(Type type)
+        {
+            if (_repleacedDependencies.Keys.Contains(type))
+            {
+                var repleacedType = _repleacedDependencies[type];
+                if (_replecingOccured.Any(t => t == repleacedType))
+                {
+                    throw new DependencyDescriptionException($"There is more than one service which override type: {repleacedType.Name}");
+                }
+
+                _replecingOccured.Add(repleacedType);
             }
         }
     }

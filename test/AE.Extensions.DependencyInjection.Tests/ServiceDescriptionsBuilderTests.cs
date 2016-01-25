@@ -16,7 +16,7 @@
     public class ServiceDescriptionsBuilderTests
     {
         [Fact]
-        public void Builder_works_correct_even_when_there_is_any_assembly_definied()
+        public void Builder_works_correct_even_when_there_is_not_assembly_definied()
         {
             // Arrange
             var builder = new ServiceDescriptorsBuilder();
@@ -29,7 +29,7 @@
         public void When_Assembly_has_services_then_builder_should_describe_them_correct()
         {
             // Arrange
-            var builder = CorrectBuilder();
+            var builder = Builder();
 
             // Act
             var serviceDescriptions = builder.Build();
@@ -42,10 +42,24 @@
         }
 
         [Fact]
+        public void When_add_custom_convention_builder_should_respect_it()
+        {
+            // Arrange
+            var namespaceEndWith = "RespectConvention";
+            var builder = Builder(namespaceEndWith);
+
+            // Act
+            var serviceDescriptions = builder.Build();
+
+            // Assert
+            Assert.All(serviceDescriptions, descriptor => Assert.EndsWith(namespaceEndWith, descriptor.ImplementationType.Namespace));
+        }
+
+        [Fact]
         public void When_exists_service_with_RepleaceDependecy_then_builder_should_describe_only_this_one()
         {
             // Arrange
-            var builder = CorrectBuilder();
+            var builder = Builder();
 
             // Act
             var serviceDescriptions = builder.Build();
@@ -62,10 +76,21 @@
         }
 
         [Fact]
+        public void Cannot_mark_single_service_more_than_one_by_RepleaceDependency()
+        {
+            // Arrange
+            var builder = Builder("MoreThanOneRepleaceDependency");
+
+            // Act & Assert
+            var exception = Assert.Throws<DependencyDescriptionException>(() => builder.Build());
+            Assert.StartsWith("There is more than one service which override type", exception.Message);
+        }
+
+        [Fact]
         public void Builder_describe_generics_in_correct_way()
         {
             // Arrange
-            var builder = CorrectBuilder();
+            var builder = Builder();
 
             // Act
             var serviceDescriptions = builder.Build();
@@ -81,18 +106,18 @@
         public void Single_implementation_cannot_inherit_more_than_one_lifetime_scope()
         {
             // Arrange
-            var builder = IncorrectBuilder();
+            var builder = Builder("MoreThanOneLifetime");
 
             // Act & Assert
             var exception = Assert.Throws<DependencyDescriptionException>(() => builder.Build());
-            Assert.Equal("Cannot set more than one lifetime", exception.Message);
+            Assert.StartsWith("Cannot set more than one lifetime", exception.Message);
         }
 
         [Fact]
         public void Builder_build_descriptors_from_assembly_in_less_that_10ms()
         {
             // Arrange
-            var builder = CorrectBuilder();
+            var builder = Builder();
             var attempts = 10000;
             var watch = new Stopwatch();
             var elapsedMilliseconds = 0L;
@@ -100,7 +125,7 @@
             // Act
             for (var i = 0; i < attempts; i++)
             {
-                builder = CorrectBuilder();
+                builder = Builder();
                 watch.Restart();
                 builder.Build();
                 watch.Stop();
@@ -116,20 +141,12 @@
             return typeof(ITestDependency).GetTypeInfo().Assembly;
         }
 
-        private static ServiceDescriptorsBuilder CorrectBuilder()
+        private static ServiceDescriptorsBuilder Builder(string namespaceEndWith = "TestServices")
         {
             var assembly = GetTestAssembly();
             var builder = new ServiceDescriptorsBuilder().AddSourceAssembly(assembly);
 
-            return builder.AddTypesConvention(new CorrectTestServicesConvention());
-        }
-
-        private static ServiceDescriptorsBuilder IncorrectBuilder()
-        {
-            var assembly = GetTestAssembly();
-            var builder = new ServiceDescriptorsBuilder().AddSourceAssembly(assembly);
-
-            return builder.AddTypesConvention(new IncorrectTestServicesConvention());
+            return builder.AddTypesConvention(new NamespaceEndWithTestServicesConvention(namespaceEndWith));
         }
 
         private static ServiceDescriptor CreateServiceDescriptor<TInterface, TImplementation>(ServiceLifetime lifetime)
@@ -137,21 +154,18 @@
             return new ServiceDescriptor(typeof(TInterface), typeof(TImplementation), lifetime);
         }
 
-        private class CorrectTestServicesConvention : TypeSelectionConvention
+        private class NamespaceEndWithTestServicesConvention : TypeSelectionConvention
         {
-            public override bool DoesSelect(Type type)
-            {
-                var @namespace = type.Namespace;
-                var isCorrect = @namespace.EndsWith("Incorrect") == false && @namespace.Contains("TestServices");
-                return isCorrect;
-            }
-        }
+            private readonly string _namespaceEndWith;
 
-        private class IncorrectTestServicesConvention : CorrectTestServicesConvention
-        {
+            public NamespaceEndWithTestServicesConvention(string namespaceEndWith)
+            {
+                _namespaceEndWith = namespaceEndWith;
+            }
+
             public override bool DoesSelect(Type type)
             {
-                return base.DoesSelect(type) == false;
+                return type.Namespace.EndsWith(_namespaceEndWith);
             }
         }
     }
