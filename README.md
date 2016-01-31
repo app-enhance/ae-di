@@ -113,7 +113,7 @@ public class BankManager : IBankManager
     }
 }
 ```
-* Use `ServicesDescriber` to retrieve all dependencies from assemblies
+* Use extensions methods for `IServiceCollection` or 'ServiceDescriptorsBuilder` to retrieve all dependencies from assemblies (see below)
 ```c#
 public void ConfigureServices(IServiceCollection services)
 {
