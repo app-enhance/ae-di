@@ -8,7 +8,6 @@
 
     using Microsoft.Extensions.DependencyInjection;
     
-
     public class ExistingServiceCollectionTypesProvider : ITypesProvider
     {
         private readonly IServiceCollection _existingServiceCollection;
