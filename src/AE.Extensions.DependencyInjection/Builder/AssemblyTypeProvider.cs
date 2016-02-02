@@ -13,6 +13,11 @@ namespace AE.Extensions.DependencyInjection.Builder
 
         public AssemblyTypeProvider(Assembly sourceAssembly)
         {
+            if (sourceAssembly == null)
+            {
+                throw new ArgumentNullException(nameof(sourceAssembly));
+            }
+
             _sourceTypes = sourceAssembly.ExportedTypes;
         }
 
