@@ -15,9 +15,9 @@
         public int GetHashCode(ServiceDescriptor obj)
         {
             var hashCode = 17;
-            hashCode = (hashCode * 7) + obj.ServiceType.GetHashCode();
-            hashCode = (hashCode * 7) + obj.ImplementationType.GetHashCode();
-            hashCode = (hashCode * 7) + obj.Lifetime.GetHashCode();
+            hashCode = hashCode * 7 + obj.ServiceType.GetHashCode();
+            hashCode = hashCode * 7 + obj.ImplementationType.GetHashCode();
+            hashCode = hashCode * 7 + obj.Lifetime.GetHashCode();
 
             return hashCode;
         }

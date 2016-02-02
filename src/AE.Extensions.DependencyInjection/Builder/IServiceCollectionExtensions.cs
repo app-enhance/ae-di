@@ -34,7 +34,7 @@
 
         private static void MergeServiceDescriptions(IServiceCollection serviceCollection, IEnumerable<ServiceDescriptor> serviceDescriptors)
         {
-            var excludedServiceDescriptors = serviceCollection.Where(service =>  serviceDescriptors.Contains(service) == false);
+            var excludedServiceDescriptors = serviceCollection.Where(service => serviceDescriptors.Contains(service) == false);
             foreach (var descriptor in excludedServiceDescriptors)
             {
                 serviceCollection.Remove(descriptor);

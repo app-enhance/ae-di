@@ -16,6 +16,13 @@
     public class ServiceDescriptionsBuilderTests
     {
         [Fact]
+        public void Builder_throw_exception_if_give_null_conventions()
+        {
+            // Act & Assert
+            Assert.Throws<ArgumentNullException>(() => new ServiceDescriptorsBuilder(null));
+        }
+
+        [Fact]
         public void Builder_works_correct_even_when_there_is_not_assembly_definied()
         {
             // Arrange
