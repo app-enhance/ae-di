@@ -1,27 +1,29 @@
 {
-    "version": "0.0.1-*",
-    "description": "AE.Extensions.DependencyInjection Class Library",
-    "authors": [ "Wojtek Gadziński" ],
-    "tags": [ "DI", "IoC" ],
+  "version": "0.0.1-*",
+  "description": "AE.Extensions.DependencyInjection Class Library",
+  "authors": [ "Wojtek Gadziński" ],
+  "tags": [ "DI", "IoC" ],
 
-    "projectUrl": "https://github.com/app-enhance/ae-di",
-    "licenseUrl": "https://github.com/app-enhance/ae-di/blob/master/LICENSE",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/app-enhance/ae-di"
-    },
+  "projectUrl": "https://github.com/app-enhance/ae-di",
+  "licenseUrl": "https://github.com/app-enhance/ae-di/blob/master/LICENSE",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/app-enhance/ae-di"
+  },
 
-    "frameworks": {
-        "net461": { },
-        "dotnet5.4": { }
-    },
-
-    "dependencies": {
+  "frameworks": {
+    "dotnet55": {
+      "dependencies": {
         "System.Runtime": "4.0.21-*",
         "System.Reflection.TypeExtensions": "4.1.0-*",
         "System.Reflection.Extensions": "4.0.1-*",
         "System.Linq.Parallel": "4.0.1-*",
-        "System.ComponentModel": "4.0.1-*",
-        "Microsoft.Extensions.DependencyInjection.Abstractions": "1.0.0-*"
+        "System.ComponentModel": "4.0.1-*"
+      }
     }
+  },
+
+  "dependencies": {
+    "Microsoft.Extensions.DependencyInjection.Abstractions": "1.0.0-*"
+  }
 }
