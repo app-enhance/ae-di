@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Collections.Concurrent;
     using System.Linq;
     using System.Reflection;
 
@@ -14,6 +15,9 @@
         private static readonly Type TransientDependencyType = typeof(ITransientDependency);
 
         private static readonly Type SingletonDependencyType = typeof(ISingletonDependency);
+
+        private static readonly ConcurrentDictionary<Type, IEnumerable<ServiceDescriptor>> ServiceDescriptorsCache = 
+            new ConcurrentDictionary<Type, IEnumerable<ServiceDescriptor>>();
 
         public static IEnumerable<ServiceDescriptor> Describe(IEnumerable<Type> typesToRegistration)
         {
@@ -29,6 +33,11 @@
         }
 
         private static IEnumerable<ServiceDescriptor> CreateDescriptors(Type type)
+        {
+            return ServiceDescriptorsCache.GetOrAdd(type, t => CreateDescriptorsInternal(t));
+        }
+
+        private static IEnumerable<ServiceDescriptor> CreateDescriptorsInternal(Type type)
         {
             var interfaces = type.GetInterfaces();
             var scope = RetieveScope(interfaces);
