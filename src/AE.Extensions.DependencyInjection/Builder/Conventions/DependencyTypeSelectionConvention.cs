@@ -42,7 +42,7 @@
         private void MemorizeRepleacedDependencyIfExist(Type type)
         {
             var attribute = type.GetTypeInfo().GetCustomAttribute<RepleaceDependencyAttribute>();
-            if (attribute != null)
+            if (attribute != null && _repleacedDependencies.ContainsKey(type) == false)
             {
                 _repleacedDependencies.Add(type, attribute.RepleacedType);
             }
@@ -50,7 +50,7 @@
 
         private void TryThrowExceptionWhenRepleaceDependencyOccurMoreThanOne(Type type)
         {
-            if (_repleacedDependencies.Keys.Contains(type))
+            if (_repleacedDependencies.ContainsKey(type))
             {
                 var repleacedType = _repleacedDependencies[type];
                 if (_replecingOccured.Any(t => t == repleacedType))
