@@ -148,7 +148,7 @@ public class AuditBankManager : BankManager
 }
 ```
 
-*TODO:*  Add possibility to override services which already exists in `ServicesCollection'
+Repleace dependency works also with services alredy added to `IServiceCollection`. TODO: possibility to repleace services added after using this extension.
 
 ### Create proxy over service
 (todo)
