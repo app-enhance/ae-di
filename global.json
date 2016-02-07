@@ -1,8 +1,8 @@
 {
-    "projects": [ "src", "test" ],
-    "sdk": {
-        "version": "1.0.0-rc2-16375",
-        "runtime": "coreclr",
-        "architecture": "x64"
-    }
+  "projects": [ "src", "test" ],
+  "sdk": {
+    "version": "1.0.0-rc2-16453",
+    "runtime": "coreclr",
+    "architecture": "x64"
+  }
 }
