@@ -12,7 +12,7 @@
   },
 
   "frameworks": {
-    "dotnet55": {
+    "dotnet54": {
       "dependencies": {
         "System.Runtime": "4.0.21-*",
         "System.Reflection.TypeExtensions": "4.1.0-*",
