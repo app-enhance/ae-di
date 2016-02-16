@@ -15,7 +15,8 @@
     "dnxcore50": {
       "dependencies": {
         "System.Runtime": "4.0.21-*",
-        "System.Reflection": "4.1.0-*"
+        "System.Reflection": "4.1.0-*",
+        "dotnet-test-xunit": "1.0.0-dev-*"
       }
     }
   },
@@ -23,10 +24,8 @@
   "dependencies": {
     "AE.Extensions.DependencyInjection": "",
     "xunit": "2.1.0-*",
-    "xunit.runner.dnx": "2.1.0-*"
   },
 
-  "commands": {
-    "test": "xunit.runner.dnx"
-  }
+  "testRunner":  "xunit"
 }
+
