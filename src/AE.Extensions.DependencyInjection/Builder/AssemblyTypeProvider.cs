@@ -23,8 +23,17 @@ namespace AE.Extensions.DependencyInjection.Builder
 
         public IEnumerable<Type> RetrieveTypes(ITypeSelector selector)
         {
-            var typesToRegistration = _sourceTypes.Where(selector.DoesSelect).ToList();
+            var choosenSelector = selector ?? new AllSelector();
+            var typesToRegistration = _sourceTypes.Where(choosenSelector.DoesSelect).ToList();
             return typesToRegistration;
+        }
+
+        private class AllSelector : ITypeSelector
+        {
+            public bool DoesSelect(Type type)
+            {
+                return true;
+            }
         }
     }
 }
