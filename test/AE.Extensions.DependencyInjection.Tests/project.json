@@ -23,7 +23,7 @@
   },
 
   "dependencies": {
-    "AE.Extensions.DependencyInjection": "",
+    "AE.Extensions.DependencyInjection": "0.0.1-*",
     "xunit": "2.1.0"
   },
 
