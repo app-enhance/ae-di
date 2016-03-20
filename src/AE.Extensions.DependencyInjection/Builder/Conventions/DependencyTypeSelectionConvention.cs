@@ -26,7 +26,7 @@
             var doesSelect = _dependencyType.IsAssignableFrom(type) && !_notRegisterDependencyType.IsAssignableFrom(type);
             if (doesSelect)
             {
-                MemorizeRepleacedDependencyIfExist(type);
+                MemorizeRepleacedDependencyIfAttached(type);
             }
 
             return doesSelect;
@@ -39,7 +39,7 @@
             return _repleacedDependencies.Values.Contains(type) == false;
         }
 
-        private void MemorizeRepleacedDependencyIfExist(Type type)
+        private void MemorizeRepleacedDependencyIfAttached(Type type)
         {
             var attribute = type.GetTypeInfo().GetCustomAttribute<RepleaceDependencyAttribute>();
             if (attribute != null && _repleacedDependencies.ContainsKey(type) == false)
