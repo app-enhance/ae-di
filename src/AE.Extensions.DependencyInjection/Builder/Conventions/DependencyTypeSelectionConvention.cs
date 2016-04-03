@@ -5,6 +5,8 @@
     using System.Linq;
     using System.Reflection;
 
+    using Abstractions;
+
     public class DependencyTypeSelectionConvention : TypeSelectionConvention
     {
         private readonly Type _dependencyType = typeof(IDependency);

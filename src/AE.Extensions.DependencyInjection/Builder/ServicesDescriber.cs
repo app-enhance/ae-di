@@ -6,6 +6,8 @@
     using System.Linq;
     using System.Reflection;
 
+    using Abstractions;
+
     using Microsoft.Extensions.DependencyInjection;
 
     internal static class ServicesDescriber

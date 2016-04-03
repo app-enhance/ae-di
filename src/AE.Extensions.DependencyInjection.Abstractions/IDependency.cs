@@ -1,4 +1,4 @@
-﻿namespace AE.Extensions.DependencyInjection
+﻿namespace AE.Extensions.DependencyInjection.Abstractions
 {
     /// <summary>
     ///     Base interface for services as dependencies

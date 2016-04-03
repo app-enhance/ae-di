@@ -1,4 +1,4 @@
-﻿namespace AE.Extensions.DependencyInjection
+﻿namespace AE.Extensions.DependencyInjection.Abstractions
 {
     using System;
     using System.Diagnostics;
