@@ -4,9 +4,9 @@
     using System.Diagnostics;
 
     [AttributeUsage(AttributeTargets.Class)]
-    public class RepleaceDependencyAttribute : Attribute
+    public class RepleaceServiceAttribute : Attribute
     {
-        public RepleaceDependencyAttribute(Type repleacedType)
+        public RepleaceServiceAttribute(Type repleacedType)
         {
             Debug.Assert(repleacedType != null);
             RepleacedType = repleacedType;

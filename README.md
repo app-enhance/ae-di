@@ -128,10 +128,10 @@ public void ConfigureServices(IServiceCollection services)
 
 There are many custom ways to use service description builder. Most cases described [here](https://github.com/app-enhance/ae-di/wiki/Custom-usage-of-service-descriptions-builder)
 
-### Repleace dependency
-There is possible to override implementaion of service (decorate) which was registered. You can do that by `RepleaceDependecyAttribute` (see exapmle below)
+### Repleace service
+There is possible to override implementaion of service (decorate) which was registered. You can do that by `RepleaceServiceAttribute` (see exapmle below)
 ```c#
-[RepleaceDependecy(typeof(BankManager))]
+[RepleaceService(typeof(BankManager))]
 public class AuditBankManager : BankManager
 {
     // Suppose that OpenAccount is virtual
@@ -149,6 +149,8 @@ public class AuditBankManager : BankManager
 ```
 
 Repleace dependency works also with services alredy added to `IServiceCollection`. TODO: possibility to repleace services added after using this extension.
+
+There is another attibute `DecorateServiceAttribute` which works the same (inherit of `RepleaceServiceAttribute`). It is introduced due to semantics and in order to improve code cleanliness.
 
 ### Create proxy over service
 (todo)

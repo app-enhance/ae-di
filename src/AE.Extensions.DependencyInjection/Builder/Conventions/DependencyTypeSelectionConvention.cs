@@ -43,7 +43,7 @@
 
         private void MemorizeRepleacedDependencyIfAttached(Type type)
         {
-            var attribute = type.GetTypeInfo().GetCustomAttribute<RepleaceDependencyAttribute>();
+            var attribute = type.GetTypeInfo().GetCustomAttribute<RepleaceServiceAttribute>();
             if (attribute != null && _repleacedDependencies.ContainsKey(type) == false)
             {
                 _repleacedDependencies.Add(type, attribute.RepleacedType);
