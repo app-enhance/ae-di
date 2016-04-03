@@ -10,13 +10,12 @@
 
     public class ServiceDescriptorsBuilder
     {
-        private readonly List<ITypeSelectionConvention> _typesConventions;
+        private readonly List<ITypesProvider> _typesProviders = new List<ITypesProvider>();
 
-        private readonly List<ITypesProvider> _typesProviders;
+        private readonly List<ITypeSelectionConvention> _typesConventions;
 
         public ServiceDescriptorsBuilder()
         {
-            _typesProviders = new List<ITypesProvider>();
             _typesConventions = new List<ITypeSelectionConvention>
                                     {
                                         new InstanceClassTypeSelectionConvention(),
@@ -25,14 +24,12 @@
         }
 
         public ServiceDescriptorsBuilder(IEnumerable<ITypeSelectionConvention> selectionConventions)
-            : this()
         {
             if ((selectionConventions == null) || (selectionConventions.Any() == false))
             {
                 throw new ArgumentNullException(nameof(selectionConventions));
             }
 
-            _typesConventions.Clear();
             _typesConventions.AddRange(selectionConventions);
         }
 
