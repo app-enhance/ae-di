@@ -12,21 +12,22 @@
   },
 
   "frameworks": {
-    "dnxcore50": {
+    "netstandard1.5": {
       "dependencies": {
-        "System.Runtime": "4.1.0-*",
-        "System.Reflection": "4.1.0-*",
-        "dotnet-test-xunit": "1.0.0-dev-*"
+        "dotnet-test-xunit": "1.0.0-dev-*",
+        "NETStandard.Library": "1.5.0-*"
       },
-      "imports": "portable-net451+win8"
+      "imports": [
+        "dnxcore50",
+        "portable-net451+win8"
+      ]
     }
   },
 
   "dependencies": {
     "AE.Extensions.DependencyInjection": "0.0.1-*",
-    "xunit": "2.1.0"
+    "xunit": "2.1.0-*"
   },
 
-  "testRunner":  "xunit"
+  "testRunner": "xunit"
 }
-
