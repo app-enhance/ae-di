@@ -2,7 +2,7 @@
 {
     using Abstractions;
 
-    [RepleaceDependency(typeof(RepleacedTestService))]
+    [RepleaceService(typeof(RepleacedTestService))]
     public class RepleacingTestService : RepleacedTestService
     {
     }

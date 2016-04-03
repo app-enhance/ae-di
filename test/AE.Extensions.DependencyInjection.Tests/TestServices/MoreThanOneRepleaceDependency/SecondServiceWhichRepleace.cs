@@ -2,7 +2,7 @@ namespace AE.Extensions.DependencyInjection.Tests.TestServices.MoreThanOneReplea
 {
     using Abstractions;
 
-    [RepleaceDependency(typeof(ServiceToRepleace))]
+    [RepleaceService(typeof(ServiceToRepleace))]
     public class SecondServiceWhichRepleace : ServiceToRepleace
     {
     }

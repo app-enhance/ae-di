@@ -2,7 +2,7 @@
 {
     using Abstractions;
 
-    [RepleaceDependency(typeof(ServiceToRepleace))]
+    [RepleaceService(typeof(ServiceToRepleace))]
     public class FirstServiceWhichRepleace : ServiceToRepleace
     {
     }
