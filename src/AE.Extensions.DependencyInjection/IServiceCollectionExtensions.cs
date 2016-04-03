@@ -1,8 +1,10 @@
-﻿namespace AE.Extensions.DependencyInjection.Builder
+﻿namespace AE.Extensions.DependencyInjection
 {
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
+
+    using Builder;
 
     using Microsoft.Extensions.DependencyInjection;
 
@@ -34,7 +36,7 @@
 
         private static void MergeServiceDescriptions(IServiceCollection serviceCollection, IEnumerable<ServiceDescriptor> serviceDescriptors)
         {
-            var excludedServiceDescriptors = serviceCollection.Where(service => serviceDescriptors.Contains(service) == false);
+            var excludedServiceDescriptors = serviceCollection.Where<ServiceDescriptor>(service => serviceDescriptors.Contains(service) == false);
             foreach (var descriptor in excludedServiceDescriptors)
             {
                 serviceCollection.Remove(descriptor);
