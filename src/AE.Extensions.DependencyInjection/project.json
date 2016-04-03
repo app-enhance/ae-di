@@ -14,6 +14,8 @@
   "frameworks": {
     "netstandard1.5": {
       "dependencies": {
+        "System.Linq.Parallel": "4.0.1-*",
+        "System.Reflection.TypeExtensions": "4.1.0-*",
         "NETStandard.Library": "1.5.0-*"
       },
       "imports": [
