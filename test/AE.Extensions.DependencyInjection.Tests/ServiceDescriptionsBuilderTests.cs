@@ -120,29 +120,6 @@
             Assert.StartsWith("Cannot set more than one lifetime", exception.Message);
         }
 
-        [Fact]
-        public void Builder_build_descriptors_from_assembly_in_less_that_10ms()
-        {
-            // Arrange
-            var builder = Builder();
-            var attempts = 10000;
-            var watch = new Stopwatch();
-            var elapsedMilliseconds = 0L;
-
-            // Act
-            for (var i = 0; i < attempts; i++)
-            {
-                builder = Builder();
-                watch.Restart();
-                builder.Build();
-                watch.Stop();
-                elapsedMilliseconds += watch.ElapsedMilliseconds;
-            }
-
-            // Assert
-            Assert.True(10 >= elapsedMilliseconds / attempts);
-        }
-
         private static Assembly GetTestAssembly()
         {
             return typeof(ITestDependency).GetTypeInfo().Assembly;
