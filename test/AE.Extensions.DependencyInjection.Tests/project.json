@@ -1,15 +1,11 @@
 ﻿{
-  "buildOptions": {
-    "emitEntryPoint": true
-  },
-
   "dependencies": {
     "Microsoft.NETCore.App": {
       "version": "1.0.0-rc2-final",
       "type": "platform"
     },
     "xunit": "2.1.0",
-    "dotnet-test-xunit": "1.0.0-dev-*"
+    "dotnet-test-xunit": "1.0.0-rc2-final"
   },
 
   "testRunner": "xunit",
@@ -19,7 +15,7 @@
       "dependencies": {
         "AE.Extensions.DependencyInjection": {
           "version": "0.0.1-*",
-          "target": "projet"
+          "target": "project"
         }
       },
       "imports": [

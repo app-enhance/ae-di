@@ -15,7 +15,7 @@
   "dependencies": {
     "AE.Extensions.DependencyInjection.Abstractions": {
       "version": "0.0.1-*",
-      "type": "project"
+      "target": "project"
     }
   },
 
